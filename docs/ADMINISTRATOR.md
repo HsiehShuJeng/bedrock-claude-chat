@@ -17,6 +17,17 @@ The admin user must be a member of group called `Admin`, which can be set up via
 
 ![](./imgs/group_membership_admin.png)
 
+```bash
+USER_POOL_ID=$(export AWS_REGION="us-west-2" && aws cloudformation describe-stacks --stack-name BedrockChatStack --query "Stacks[0].Outputs[?contains(OutputKey, 'AuthUserPoolId')].OutputValue" --output text)
+
+aws cognito-idp admin-add-user-to-group \
+    --user-pool-id $USER_POOL_ID \
+    --username f85143d0-8001-70d9-e169-183c9948664e \
+    --group-name Admin \
+    --region ${AWS_REGION}
+
+```
+
 ## Notes
 
 - As stated in the [architecture](../README.md#architecture), the admin features will refer to the S3 bucket exported from DynamoDB. Please note that since the export is performed once every hour, the latest conversations may not be reflected immediately.
