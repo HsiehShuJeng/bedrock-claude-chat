@@ -5,7 +5,8 @@ import {
   CloudFrontWebDistribution,
   OriginAccessIdentity,
 } from "aws-cdk-lib/aws-cloudfront";
-import { HostedZone } from "aws-cdk-lib/aws-route53";
+import { ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
+import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import {
   BlockPublicAccess,
   Bucket,
@@ -27,6 +28,7 @@ export class Frontend extends Construct {
   readonly assetBucket: Bucket;
   constructor(scope: Construct, id: string, props: FrontendProps) {
     super(scope, id);
+    const domainName = 'scott-llm-experiment-center.com';
 
     const assetBucket = new Bucket(this, "AssetBucket", {
       encryption: BucketEncryption.S3_MANAGED,
@@ -37,11 +39,11 @@ export class Frontend extends Construct {
     });
 
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
-      domainName: 'scott-llm-experiment-center.com',
+      domainName: domainName,
       privateZone: false
     });
     const certificate = new Certificate(this, "Certificate", {
-      domainName: "scott-llm-experiment-center.com",
+      domainName: domainName,
       validation: CertificateValidation.fromDns(hostedZone),
     });
 
@@ -63,6 +65,14 @@ export class Frontend extends Construct {
           ],
         },
       ],
+      viewerCertificate: {
+        aliases: [domainName],
+        props: {
+          acmCertificateArn: certificate.certificateArn,
+          sslSupportMethod: 'sni-only',
+          minimumProtocolVersion: 'TLSv1.2_2021',
+        }
+      },
       errorConfigurations: [
         {
           errorCode: 404,
@@ -85,6 +95,12 @@ export class Frontend extends Construct {
     });
     this.assetBucket = assetBucket;
     this.cloudFrontWebDistribution = distribution;
+
+    new ARecord(this, "AliasRecord", {
+      zone: hostedZone,
+      recordName: domainName,
+      target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+    });
 
     new cdk.CfnOutput(this, 'CertificateArn', {value: certificate.certificateArn, description: 'The ARN of the certificate managed by ACM.'})
   }
