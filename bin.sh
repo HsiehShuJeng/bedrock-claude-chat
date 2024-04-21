@@ -3,12 +3,25 @@
 StackName="CodeBuildForDeploy"
 Region="us-west-2"
 
-stackId=$(aws cloudformation create-stack \
-  --stack-name $StackName \
-  --template-body file://deploy.yml \
-  --capabilities CAPABILITY_IAM \
-  --region $Region \
-  --query 'StackId' --output text)
+stackExists=$(aws cloudformation describe-stacks --stack-name $StackName --region $Region --query 'Stacks[0].StackId' --output text 2>/dev/null)
+
+if [ -z "$stackExists" ]; then
+  # Stack does not exist, create it
+  stackId=$(aws cloudformation create-stack \
+    --stack-name $StackName \
+    --template-body file://deploy.yml \
+    --capabilities CAPABILITY_IAM \
+    --region $Region \
+    --query 'StackId' --output text)
+else
+  # Stack already exists, update it
+  stackId=$(aws cloudformation update-stack \
+    --stack-name $StackName \
+    --template-body file://deploy.yml \
+    --capabilities CAPABILITY_IAM \
+    --region $Region \
+    --query 'StackId' --output text)
+fi
 
 echo "Waiting for the stack creation to complete..."
 echo "NOTE: this stack contains CodeBuild project which will be used for cdk deploy."
