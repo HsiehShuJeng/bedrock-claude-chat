@@ -1,18 +1,21 @@
-import { Construct } from "constructs";
+import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy, Stack } from "aws-cdk-lib";
+import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatemanager";
+import {
+  CloudFrontWebDistribution,
+  OriginAccessIdentity,
+} from "aws-cdk-lib/aws-cloudfront";
+import { HostedZone } from "aws-cdk-lib/aws-route53";
 import {
   BlockPublicAccess,
   Bucket,
   BucketEncryption,
   IBucket,
 } from "aws-cdk-lib/aws-s3";
-import {
-  CloudFrontWebDistribution,
-  OriginAccessIdentity,
-} from "aws-cdk-lib/aws-cloudfront";
+import { Construct } from "constructs";
 import { NodejsBuild } from "deploy-time-build";
-import { Auth } from "./auth";
 import { Idp } from "../utils/identity-provider";
+import { Auth } from "./auth";
 
 export interface FrontendProps {
   readonly accessLogBucket: IBucket;
@@ -31,6 +34,14 @@ export class Frontend extends Construct {
       enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+    });
+
+    const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
+      domainName: 'scott-llm-experiment-center.com',
+    });
+    const certificate = new Certificate(this, "Certificate", {
+      domainName: "scott-llm-experiment-center.com",
+      validation: CertificateValidation.fromDns(hostedZone),
     });
 
     const originAccessIdentity = new OriginAccessIdentity(
@@ -73,6 +84,8 @@ export class Frontend extends Construct {
     });
     this.assetBucket = assetBucket;
     this.cloudFrontWebDistribution = distribution;
+
+    new cdk.CfnOutput(this, 'CertificateArn', {value: certificate.certificateArn, description: 'The ARN of the certificate managed by ACM.'})
   }
 
   getOrigin(): string {
