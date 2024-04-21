@@ -1,12 +1,8 @@
-import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy, Stack } from "aws-cdk-lib";
-import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatemanager";
 import {
   CloudFrontWebDistribution,
   OriginAccessIdentity,
 } from "aws-cdk-lib/aws-cloudfront";
-import { ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
-import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import {
   BlockPublicAccess,
   Bucket,
@@ -38,14 +34,14 @@ export class Frontend extends Construct {
       autoDeleteObjects: true,
     });
 
-    const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
-      domainName: domainName,
-      privateZone: false
-    });
-    const certificate = new Certificate(this, "Certificate", {
-      domainName: domainName,
-      validation: CertificateValidation.fromDns(hostedZone),
-    });
+    // const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
+    //   domainName: domainName,
+    //   privateZone: false
+    // });
+    // const certificate = new Certificate(this, "Certificate", {
+    //   domainName: domainName,
+    //   validation: CertificateValidation.fromDns(hostedZone),
+    // });
 
     const originAccessIdentity = new OriginAccessIdentity(
       this,
@@ -96,13 +92,13 @@ export class Frontend extends Construct {
     this.assetBucket = assetBucket;
     this.cloudFrontWebDistribution = distribution;
 
-    new ARecord(this, "AliasRecord", {
-      zone: hostedZone,
-      recordName: domainName,
-      target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
-    });
+    // new ARecord(this, "AliasRecord", {
+    //   zone: hostedZone,
+    //   recordName: domainName,
+    //   target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+    // });
 
-    new cdk.CfnOutput(this, 'CertificateArn', {value: certificate.certificateArn, description: 'The ARN of the certificate managed by ACM.'})
+    // new cdk.CfnOutput(this, 'CertificateArn', {value: certificate.certificateArn, description: 'The ARN of the certificate managed by ACM.'})
   }
 
   getOrigin(): string {
