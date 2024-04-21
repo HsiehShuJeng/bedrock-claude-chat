@@ -1,4 +1,6 @@
+import * as cdk from "aws-cdk-lib";
 import { CfnOutput, RemovalPolicy, StackProps } from "aws-cdk-lib";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
 import {
   BlockPublicAccess,
   Bucket,
@@ -7,21 +9,18 @@ import {
   ObjectOwnership,
 } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
-import { Auth } from "./constructs/auth";
 import { Api } from "./constructs/api";
-import { Database } from "./constructs/database";
-import { Frontend } from "./constructs/frontend";
-import { WebSocket } from "./constructs/websocket";
-import * as cdk from "aws-cdk-lib";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
-import { DbConfig, Embedding } from "./constructs/embedding";
-import { VectorStore } from "./constructs/vectorstore";
-import { UsageAnalysis } from "./constructs/usage-analysis";
-import { TIdentityProvider, identityProvider } from "./utils/identity-provider";
 import { ApiPublishCodebuild } from "./constructs/api-publish-codebuild";
+import { Auth } from "./constructs/auth";
+import { Database } from "./constructs/database";
+import { Embedding } from "./constructs/embedding";
+import { Frontend } from "./constructs/frontend";
+import { UsageAnalysis } from "./constructs/usage-analysis";
+import { VectorStore } from "./constructs/vectorstore";
 import { WebAclForPublishedApi } from "./constructs/webacl-for-published-api";
-import { VpcConfig } from "./api-publishment-stack";
+import { WebSocket } from "./constructs/websocket";
 import { CronScheduleProps, createCronSchedule } from "./utils/cron-schedule";
+import { TIdentityProvider, identityProvider } from "./utils/identity-provider";
 
 export interface BedrockChatStackProps extends StackProps {
   readonly bedrockRegion: string;

@@ -3,5 +3,14 @@
     "ap-northeast-1a",
     "ap-northeast-1c",
     "ap-northeast-1d"
-  ]
+  ],
+  "availability-zones:account=630778274080:region=ap-southeast-1": [
+    "ap-southeast-1a",
+    "ap-southeast-1b",
+    "ap-southeast-1c"
+  ],
+  "hosted-zone:account=630778274080:domainName=scott-llm-experiment-center.com:privateZone=false:region=ap-southeast-1": {
+    "Id": "/hostedzone/Z01686642U4JABB77JKIG",
+    "Name": "scott-llm-experiment-center.com."
+  }
 }

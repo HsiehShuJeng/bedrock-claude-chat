@@ -38,6 +38,7 @@ export class Frontend extends Construct {
 
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
       domainName: 'scott-llm-experiment-center.com',
+      privateZone: false
     });
     const certificate = new Certificate(this, "Certificate", {
       domainName: "scott-llm-experiment-center.com",
