@@ -61,14 +61,14 @@ export class Frontend extends Construct {
           ],
         },
       ],
-      viewerCertificate: {
-        aliases: [domainName],
-        props: {
-          acmCertificateArn: certificate.certificateArn,
-          sslSupportMethod: 'sni-only',
-          minimumProtocolVersion: 'TLSv1.2_2021',
-        }
-      },
+      // viewerCertificate: {
+      //   aliases: [domainName],
+      //   props: {
+      //     acmCertificateArn: certificate.certificateArn,
+      //     sslSupportMethod: 'sni-only',
+      //     minimumProtocolVersion: 'TLSv1.2_2021',
+      //   }
+      // },
       errorConfigurations: [
         {
           errorCode: 404,
