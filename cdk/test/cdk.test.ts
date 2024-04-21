@@ -66,7 +66,9 @@ describe("Fine-grained Assertions Test", () => {
       {
         bedrockRegion: "us-east-1",
         crossRegionReferences: true,
+        domainName: "test.com",
         webAclId: "",
+        certificateArn: "",
         identityProviders: [
           {
             secretName: "MyOidcTestSecret",
@@ -113,7 +115,9 @@ describe("Fine-grained Assertions Test", () => {
     const stack = new BedrockChatStack(app, "MyTestStack", {
       bedrockRegion: "us-east-1",
       crossRegionReferences: true,
+      domainName: "test.com",
       webAclId: "",
+      certificateArn: "",
       identityProviders: [],
       userPoolDomainPrefix: "",
       publishedApiAllowedIpV4AddressRanges: [""],
@@ -136,7 +140,9 @@ describe("Scheduler Test", () => {
     const hasScheduleStack = new BedrockChatStack(app, "HasSchedulesStack", {
       bedrockRegion: "us-east-1",
       crossRegionReferences: true,
+      domainName: "test.com",
       webAclId: "",
+      certificateArn: "",
       identityProviders: [],
       userPoolDomainPrefix: "",
       publishedApiAllowedIpV4AddressRanges: [""],
@@ -173,7 +179,9 @@ describe("Scheduler Test", () => {
     const defaultStack = new BedrockChatStack(app, "DefaultStack", {
       bedrockRegion: "us-east-1",
       crossRegionReferences: true,
+      domainName: "test.com",
       webAclId: "",
+      certificateArn: "",
       identityProviders: [],
       userPoolDomainPrefix: "",
       publishedApiAllowedIpV4AddressRanges: [""],
