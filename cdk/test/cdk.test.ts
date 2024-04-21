@@ -1,6 +1,6 @@
 import * as cdk from "aws-cdk-lib";
-import { BedrockChatStack } from "../lib/bedrock-chat-stack";
 import { Template } from "aws-cdk-lib/assertions";
+import { BedrockChatStack } from "../lib/bedrock-chat-stack";
 
 describe("Fine-grained Assertions Test", () => {
   test("Identity Provider Generation", () => {
@@ -12,8 +12,10 @@ describe("Fine-grained Assertions Test", () => {
       "IdentityProviderGenerateStack",
       {
         bedrockRegion: "us-east-1",
+        domainName: "test.com",
         crossRegionReferences: true,
         webAclId: "",
+        certificateArn: "",
         identityProviders: [
           {
             secretName: "MyTestSecret",
