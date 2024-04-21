@@ -1,17 +1,17 @@
 import * as cdk from "aws-cdk-lib";
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
-import { Construct } from "constructs";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
-import { DockerImageCode, DockerImageFunction } from "aws-cdk-lib/aws-lambda";
-import * as iam from "aws-cdk-lib/aws-iam";
-import * as lambdaEventSources from "aws-cdk-lib/aws-lambda-event-sources";
-import * as path from "path";
-import { Platform } from "aws-cdk-lib/aws-ecr-assets";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import * as wafv2 from "aws-cdk-lib/aws-wafv2";
+import { Platform } from "aws-cdk-lib/aws-ecr-assets";
+import * as iam from "aws-cdk-lib/aws-iam";
+import { DockerImageCode, DockerImageFunction } from "aws-cdk-lib/aws-lambda";
+import * as lambdaEventSources from "aws-cdk-lib/aws-lambda-event-sources";
+import * as s3 from "aws-cdk-lib/aws-s3";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import * as sqs from "aws-cdk-lib/aws-sqs";
-import * as s3 from "aws-cdk-lib/aws-s3";
+import * as wafv2 from "aws-cdk-lib/aws-wafv2";
+import { Construct } from "constructs";
+import * as path from "path";
 
 export interface VpcConfig {
   vpcId: string;
