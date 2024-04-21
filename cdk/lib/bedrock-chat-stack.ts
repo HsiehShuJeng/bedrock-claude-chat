@@ -24,7 +24,9 @@ import { TIdentityProvider, identityProvider } from "./utils/identity-provider";
 
 export interface BedrockChatStackProps extends StackProps {
   readonly bedrockRegion: string;
+  readonly domainName: string;
   readonly webAclId: string;
+  readonly certificateArn: string;
   readonly identityProviders: TIdentityProvider[];
   readonly userPoolDomainPrefix: string;
   readonly publishedApiAllowedIpV4AddressRanges: string[];
@@ -91,7 +93,9 @@ export class BedrockChatStack extends cdk.Stack {
 
     const frontend = new Frontend(this, "Frontend", {
       accessLogBucket,
+      domainName: props.domainName,
       webAclId: props.webAclId,
+      certificateArn: props.certificateArn
     });
 
     const auth = new Auth(this, "Auth", {

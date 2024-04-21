@@ -1,11 +1,14 @@
-import * as cdk from "aws-cdk-lib";
-import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
-import * as wafv2 from "aws-cdk-lib/aws-wafv2";
-import { Construct } from "constructs";
+import * as cdk from 'aws-cdk-lib';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
+import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
+import { Construct } from 'constructs';
 
 interface FrontendWafStackProps extends StackProps {
   readonly allowedIpV4AddressRanges: string[];
   readonly allowedIpV6AddressRanges: string[];
+  readonly domainName: string;
 }
 
 /**
@@ -16,9 +19,19 @@ export class FrontendWafStack extends Stack {
    * Web ACL ARN
    */
   public readonly webAclArn: CfnOutput;
+  public readonly certificateArn: CfnOutput;
 
   constructor(scope: Construct, id: string, props: FrontendWafStackProps) {
     super(scope, id, props);
+
+    const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
+      domainName: props.domainName,
+      privateZone: false
+    });
+    const certificate = new Certificate(this, "Certificate", {
+      domainName: props.domainName,
+      validation: CertificateValidation.fromDns(hostedZone),
+    });
 
     // create Ipset for ACL
     const ipV4SetReferenceStatement = new wafv2.CfnIPSet(
@@ -82,5 +95,6 @@ export class FrontendWafStack extends Stack {
     this.webAclArn = new cdk.CfnOutput(this, "WebAclId", {
       value: webAcl.attrArn,
     });
+    this.certificateArn = new cdk.CfnOutput(this, "CertificateArn", {value: certificate.certificateArn});
   }
 }

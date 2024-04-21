@@ -16,7 +16,9 @@ import { Auth } from "./auth";
 
 export interface FrontendProps {
   readonly accessLogBucket: IBucket;
+  readonly domainName: string;
   readonly webAclId: string;
+  readonly certificateArn: string;
 }
 
 export class Frontend extends Construct {
@@ -24,7 +26,6 @@ export class Frontend extends Construct {
   readonly assetBucket: Bucket;
   constructor(scope: Construct, id: string, props: FrontendProps) {
     super(scope, id);
-    const domainName = 'scott-llm-experiment-center.com';
 
     const assetBucket = new Bucket(this, "AssetBucket", {
       encryption: BucketEncryption.S3_MANAGED,
@@ -61,14 +62,14 @@ export class Frontend extends Construct {
           ],
         },
       ],
-      // viewerCertificate: {
-      //   aliases: [domainName],
-      //   props: {
-      //     acmCertificateArn: certificate.certificateArn,
-      //     sslSupportMethod: 'sni-only',
-      //     minimumProtocolVersion: 'TLSv1.2_2021',
-      //   }
-      // },
+      viewerCertificate: {
+        aliases: [props.domainName],
+        props: {
+          acmCertificateArn: props.certificateArn,
+          sslSupportMethod: 'sni-only',
+          minimumProtocolVersion: 'TLSv1.2_2021',
+        }
+      },
       errorConfigurations: [
         {
           errorCode: 404,

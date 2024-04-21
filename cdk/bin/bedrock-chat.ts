@@ -10,6 +10,8 @@ const app = new cdk.App();
 
 const BEDROCK_REGION = app.node.tryGetContext("bedrockRegion");
 
+const domainName = 'scott-llm-experiment-center.com';
+
 // Allowed IP address ranges for this app itself
 const ALLOWED_IP_V4_ADDRESS_RANGES: string[] = app.node.tryGetContext(
   "allowedIpV4AddressRanges"
@@ -41,6 +43,7 @@ const waf = new FrontendWafStack(app, `FrontendWafStack`, {
   },
   allowedIpV4AddressRanges: ALLOWED_IP_V4_ADDRESS_RANGES,
   allowedIpV6AddressRanges: ALLOWED_IP_V6_ADDRESS_RANGES,
+  domainName: domainName
 });
 
 const chat = new BedrockChatStack(app, `BedrockChatStack`, {
