@@ -89,6 +89,20 @@ export class BedrockChatStack extends cdk.Stack {
       removalPolicy: RemovalPolicy.DESTROY,
       objectOwnership: ObjectOwnership.OBJECT_WRITER,
       autoDeleteObjects: true,
+      cors: [
+        {
+          allowedMethods: [
+            HttpMethods.GET,
+            HttpMethods.POST,
+            HttpMethods.PUT,
+            HttpMethods.DELETE,
+            HttpMethods.HEAD
+          ],
+          allowedOrigins: ['*'],
+          allowedHeaders: ['*'],
+          exposedHeaders: []
+        }
+      ]
     });
 
     const frontend = new Frontend(this, "Frontend", {
@@ -194,6 +208,7 @@ export class BedrockChatStack extends cdk.Stack {
     new CfnOutput(this, "FrontendURL", {
       value: frontend.getOrigin(),
     });
+    // 
 
     // Outputs for API publication
     new CfnOutput(this, "PublishedApiWebAclArn", {

@@ -64,4 +64,4 @@ echo "Fetch CDK deployment logs..."
 logs=$(aws logs get-log-events --log-group-name $logGroupName --log-stream-name $logStreamName --region $Region)
 frontendUrl=$(echo "$logs" | grep -o 'FrontendURL = [^ ]*' | cut -d' ' -f3 | tr -d '\n,')
 
-echo "Frontend URL: $frontendUrl"
+echo "Frontend URL: $frontendUrl (scott-llm-experiment-center.com)"
