@@ -12,5 +12,15 @@
   "hosted-zone:account=630778274080:domainName=scott-llm-experiment-center.com:privateZone=false:region=ap-southeast-1": {
     "Id": "/hostedzone/Z01686642U4JABB77JKIG",
     "Name": "scott-llm-experiment-center.com."
+  },
+  "availability-zones:account=630778274080:region=us-west-2": [
+    "us-west-2a",
+    "us-west-2b",
+    "us-west-2c",
+    "us-west-2d"
+  ],
+  "hosted-zone:account=630778274080:domainName=scott-llm-experiment-center.com:privateZone=false:region=us-west-2": {
+    "Id": "/hostedzone/Z01686642U4JABB77JKIG",
+    "Name": "scott-llm-experiment-center.com."
   }
 }

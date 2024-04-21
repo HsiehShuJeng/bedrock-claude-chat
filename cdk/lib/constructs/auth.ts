@@ -1,16 +1,16 @@
+import { PythonFunction } from "@aws-cdk/aws-lambda-python-alpha";
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib";
 import {
+  CfnUserPoolGroup,
   ProviderAttribute,
   UserPool,
   UserPoolClient,
-  UserPoolOperation,
   UserPoolIdentityProviderGoogle,
-  CfnUserPoolGroup,
   UserPoolIdentityProviderOidc,
+  UserPoolOperation,
 } from "aws-cdk-lib/aws-cognito";
-import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { PythonFunction } from "@aws-cdk/aws-lambda-python-alpha";
+import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import * as path from "path";
 import { Idp, TIdentityProvider } from "../utils/identity-provider";

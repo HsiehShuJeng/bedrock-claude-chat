@@ -1,6 +1,6 @@
-import { Construct } from "constructs";
-import * as wafv2 from "aws-cdk-lib/aws-wafv2";
 import { CfnOutput } from "aws-cdk-lib";
+import * as wafv2 from "aws-cdk-lib/aws-wafv2";
+import { Construct } from "constructs";
 
 export interface WebAclForPublishedApiProps {
   readonly allowedIpV4AddressRanges: string[];
