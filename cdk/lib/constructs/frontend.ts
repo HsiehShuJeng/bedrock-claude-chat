@@ -1,7 +1,10 @@
 import { CfnOutput, RemovalPolicy, Stack } from "aws-cdk-lib";
 import {
+  CloudFrontAllowedCachedMethods,
+  CloudFrontAllowedMethods,
   CloudFrontWebDistribution,
   OriginAccessIdentity,
+  ViewerProtocolPolicy
 } from "aws-cdk-lib/aws-cloudfront";
 import { ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
@@ -9,6 +12,7 @@ import {
   BlockPublicAccess,
   Bucket,
   BucketEncryption,
+  HttpMethods,
   IBucket,
 } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
@@ -35,6 +39,21 @@ export class Frontend extends Construct {
       enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+      cors: [
+        {
+          allowedMethods: [
+            HttpMethods.GET,
+            HttpMethods.POST,
+            HttpMethods.PUT,
+            HttpMethods.DELETE,
+            HttpMethods.HEAD
+          ],
+          allowedOrigins: ['*'],
+          allowedHeaders: ['*'],
+          exposedHeaders: [],
+          maxAge: 3000
+        }
+      ]
     });
 
     const originAccessIdentity = new OriginAccessIdentity(
@@ -51,6 +70,13 @@ export class Frontend extends Construct {
           behaviors: [
             {
               isDefaultBehavior: true,
+              allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+              cachedMethods: CloudFrontAllowedCachedMethods.GET_HEAD_OPTIONS,
+              forwardedValues: {
+                queryString: false,
+                headers: ["Origin"],
+              },
+              viewerProtocolPolicy: ViewerProtocolPolicy.ALLOW_ALL
             },
           ],
         },
@@ -95,7 +121,7 @@ export class Frontend extends Construct {
       recordName: props.domainName,
       target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
     });
-    
+
   }
 
   getOrigin(): string {
