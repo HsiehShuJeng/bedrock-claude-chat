@@ -1,9 +1,8 @@
-import React, { ReactNode, cloneElement, ReactElement } from 'react';
-import { BaseProps } from '../@types/common';
-import { Authenticator } from '@aws-amplify/ui-react';
 import { SocialProvider } from '@aws-amplify/ui';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import React, { ReactElement, ReactNode, cloneElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthenticator } from '@aws-amplify/ui-react';
+import { BaseProps } from '../@types/common';
 
 type Props = BaseProps & {
   socialProviders: SocialProvider[];

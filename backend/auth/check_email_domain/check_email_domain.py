@@ -1,5 +1,5 @@
-import os
 import json
+import os
 from typing import Dict
 
 ALLOWED_SIGN_UP_EMAIL_DOMAINS_STR = os.environ.get("ALLOWED_SIGN_UP_EMAIL_DOMAINS_STR")
@@ -40,7 +40,9 @@ def handler(event: Dict, context: Dict) -> Dict:
             return event
         else:
             # Raise an exception with an error message on failure
-            raise Exception("Invalid email domain")
+            raise Exception(
+                "\n保持好奇心的冒險者您好，若您想體驗 Opus 搭配知識庫的問答，您可以聯繫 scott.hsieh 討論，或是和 AIInnovation 活動主辦單位敲碗支援 Claude 3 Opus。^.<"
+            )
     except Exception as e:
         print("Error occurred:", e)
         # Raise the exception with an appropriate error message
